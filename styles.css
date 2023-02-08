@@ -7,13 +7,13 @@
     /*--primaryColor: #fd4;*/
     --primaryColor: rgb(255, 215, 68);
 }
-html, body{min-height:95%;}
+/*html, body{min-height:85%;}*/
 body{
     font-family: 'Roboto', sans-serif;
     background-color:var(--bgColor);
     color: var(--textPrimary);
     font-size: 1.4rem;
-    height: 95%;
+    /*height: 95%;*/
 }
 main{
     width: 900px;
@@ -47,9 +47,7 @@ button{
     border:0;
     color: rgba(255,255,255,.5);
     width: 150px;
-    height: 60px;
-    padding: 5px 20px;
-    margin: 30px 20px;
+    height: 40px;
     border-radius: 5px;
     cursor: pointer;
     top: 50px;
@@ -71,6 +69,7 @@ div#game:focus{
     justify-content: space-evenly;
     filter: blur(5px);
     color: var(--textSecondary);
+    /*transition: all .1s ease;*/
 }
 #game:focus #words{
     filter: blur(0);
@@ -171,7 +170,7 @@ div.word{
     align-items: center; 
 }
 .reminder{
-    height: 20px;
+    height: 30px;
     display: flex;
     left:  45%;
     justify-content: center;
