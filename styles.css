@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&family=Poppins:wght@400;500;600&display=swap');
 :root{
     /*--bgColor: #333;*/
     --bgColor: rgb(5, 11, 31);
@@ -9,14 +10,15 @@
 }
 /*html, body{min-height:85%;}*/
 body{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 500;
     background-color:var(--bgColor);
     color: var(--textPrimary);
     font-size: 1.4rem;
     /*height: 95%;*/
 }
 main{
-    width: 900px;
+    width: 1200px;
     margin: 50px auto;
     /*height:80vh;*/
     justify-content: center;
@@ -69,7 +71,6 @@ div#game:focus{
     justify-content: space-evenly;
     filter: blur(5px);
     color: var(--textSecondary);
-    /*transition: all .1s ease;*/
 }
 #game:focus #words{
     filter: blur(0);
@@ -129,11 +130,10 @@ div.word{
 .word-box{
     display: inline-block;
     font-size:20px;
-    min-width:125px;
+    min-width:140px;
     border-width:0px;
     height: 95px;
     border-style:solid;
-    padding:5px;
     color:var(--head-text-color);
     overflow:hidden;
     user-select:none;
@@ -144,7 +144,6 @@ div.word{
     display: flex;
     justify-content: center; 
     align-items: center; 
-    /*width: 100%;*/
 }
 
 
