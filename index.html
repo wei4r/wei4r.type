@@ -13,16 +13,21 @@
         </h1>
         <div id="header">
             <div id="info"></div>
+            <div class="buttons">
+                <button class="time">15</button>
+                <button class="time">30</button>
+                <button class="time">60</button>
+            </div>
         </div>
-        <div class="reminder" id="enter-to-skip">按下Enter以跳過詞彙</div>
+        <div class="reminder ingame" id="enter-to-skip">按下Enter以跳過詞彙</div>
         <div id="game" tabindex="0">
-            <div id="words"></div>
-            <div id="cursor"></div>
+            <div id="words" class="ingame"></div>
+            <div id="cursor" class="ingame"></div>
             <div id="focus-error">Click here to focus</div>
-            <div id="result"></div>
+            <div id="result" class="outgame"></div>
         </div>
-        <div class="reminder" id="restart-reminder">按下Enter以重新開始</div>
-        <div id="buttons">
+        <div class="reminder outgame" id="restart-reminder">按下Enter以重新開始</div>
+        <div class="buttons">
             <button id="newGameBtn">New game</button>
         </div>
     </main>

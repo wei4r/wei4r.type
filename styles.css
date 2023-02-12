@@ -19,11 +19,13 @@ body{
 }
 main{
     width: 1200px;
-    margin: 50px auto;
+    margin: 25px auto;
     /*height:80vh;*/
     justify-content: center;
 }
 h1{
+    height: 50px;
+    padding: 0;
     color: var(--primaryColor);
 }
 h1 svg{
@@ -34,25 +36,36 @@ h1 svg{
     display: flex;
     margin: 0 auto;
 }
-#buttons{
-    
+.buttons{
     text-align: center;
 }
 #info{
+    margin-top: 2px;
     width: 7%;
     color: var(--primaryColor);
+}
+.time{
+    height: 30px;
+    width: 45px;
+}
+button:hover{
+    background: var(--primaryColor);
+    font-weight: 700;
+    color: black;
 }
 button{
     position: block;
     font-size: 1rem;
+    height: 40px;
     background: rgba(255,255,255,.2);
     border:0;
     color: rgba(255,255,255,.5);
-    width: 150px;
-    height: 40px;
     border-radius: 5px;
     cursor: pointer;
     top: 50px;
+}
+#newGameBtn{
+    width: 150px;
 }
 div#game{
     margin: 8%;
@@ -71,6 +84,7 @@ div#game:focus{
     justify-content: space-evenly;
     filter: blur(5px);
     color: var(--textSecondary);
+    transition: all .25s ease;
 }
 #game:focus #words{
     filter: blur(0);
@@ -81,6 +95,7 @@ div#game:focus{
     inset: 0;
     text-align: center;
     font-size: 2.5rem;
+    font-weight: 100;
 
 }
 #game:focus #focus-error{
