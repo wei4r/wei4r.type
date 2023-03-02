@@ -2,11 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&family=Poppins:wght@400;500;600&display=swap');
 :root{
     /*--bgColor: #333;*/
-    --bgColor: rgb(5, 11, 31);
+    --bgColor: #002254;
     --textPrimary: #fff;
     --textSecondary: #666;
-    /*--primaryColor: #fd4;*/
-    --primaryColor: rgb(255, 215, 68);
+    --primaryColor: #ffde59;
+    /*--primaryColor: rgb(255, 215, 68);*/
 }
 /*html, body{min-height:85%;}*/
 body{
@@ -145,7 +145,7 @@ div.word{
 .word-box{
     display: inline-block;
     font-size:20px;
-    min-width:140px;
+    min-width:155px;
     border-width:0px;
     height: 95px;
     border-style:solid;
@@ -163,7 +163,8 @@ div.word{
 
 
 .chinese.correct{
-    color: #fff;
+    /*color: #fff;*/
+    color: var(--primaryColor);
 }
 .chinese{
     display: flex;
@@ -175,14 +176,29 @@ div.word{
     color: #f55;
 }
 #result{
+    padding-top: 5%;
     font-family: 'Roboto', sans-serif;
     color: var(--primaryColor);
     display: none;
-    font-size: 3rem;
-    height:285px;
+    font-size: 4rem;
     justify-content: center; 
     align-items: center; 
+    text-align: center;
+    flex-flow: column wrap;
 }
+#wpm{
+    height: 60px;
+}
+#acc{
+    height: 60px;
+}
+.title{
+    color:#666;
+    width: 120px;
+    height:60px;
+    font-size: 2.5rem;
+}
+
 .reminder{
     height: 30px;
     display: flex;
