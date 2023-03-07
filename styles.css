@@ -1,8 +1,7 @@
 /*@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');*/
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&family=Poppins:wght@400;500;600&display=swap');
 :root{
-    /*--bgColor: #333;*/
-    --bgColor: #002254;
+    --bgColor: rgb(5, 11, 31);
     --textPrimary: #fff;
     --textSecondary: #666;
     --primaryColor: #ffde59;
