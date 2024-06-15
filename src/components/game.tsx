@@ -1,72 +1,55 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import "../css/globals.css";
+import GameOverComponent from './gameOver';
 import styles from "../css/page.module.css";
 import { 
-	whole_word, words, wordsCount, alter_key, gameTime,
+	whole_word, words, wordsCount, alter_key, moveCursor, handleWordLogic, // setGameTime, gameTime,
 	addClass, removeClass, formatWord, newGame, getResult, gameOver, checkCorrect 
   } from '../logic';
 
 export default function Game() {
 	const gameRef = useRef<HTMLDivElement>(null);
+	// console.log("check gameRef", gameRef);
+	const [isGameStarted, setIsGameStarted] = useState(false);
+	const [userInput, setUserInput] = useState('');
+	const [gameTime, setGameTime] = useState(30);
+	const [gameOverState, setGameOverState] = useState(false);
+	const cursorRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-	  const gameElement = gameRef.current;
-	  console.log("check", gameElement);
-	  if (gameElement) {
-		gameElement.addEventListener('keydown', handleKeydown);
-	  }
-	  
-	  newGame();
-	  return () => {
-		if (gameElement) {
-		  gameElement.removeEventListener('keydown', handleKeydown);
+		if (gameRef.current) {
+			gameRef.current.focus();
+			console.log("focus");
 		}
-	  };
+		newGame();
 	}, []);
-  
-	const handleKeydown = (ev: KeyboardEvent) => {
-		const keyEvent = ev as KeyboardEvent;
-		const key = keyEvent.key;
-		const currentWord = document.querySelector('.word-box.current') as HTMLElement;
-		const currentLetter = document.querySelector('.letter.current') as HTMLElement;
-		const expected = currentLetter?.innerHTML || 'Enter';
-		const isLetter = key.length === 1 && key !== 'Meta' && key !== 'CapsLock';
-		const isEnter = key === 'Enter';
-		const isBackspace = key === 'Backspace';
-		const isFirstLetter = currentLetter === currentWord?.children[1]?.children[0];
-		const isLastLetter = currentLetter === currentWord?.children[1]?.lastChild;
 	
-		if (document.querySelector('.game.over')) {
+	const handleKeydown = useCallback((keyEvent: KeyboardEvent) => {
+		if (gameOverState) return;
+		
+		const key = keyEvent.key;
+		const currentWord = document.querySelector(`.${styles.word_box}.${styles.current}`) as HTMLElement;
+		const currentLetter = document.querySelector(`.${styles.letter}.${styles.current}`) as HTMLElement;
+		const cursor = cursorRef.current as HTMLElement;
+
+		const wordLogic = handleWordLogic(key, currentWord, currentLetter, cursor);
+
+
+		setUserInput((prevInput) => prevInput + key);
+		
+		if (!isGameStarted && wordLogic.isLetter) {
+			setIsGameStarted(true);
+			console.log("START!!!");
+		}
+		if (document.querySelector(`.${styles.game}.${styles.over}`)) {
 			return;
 		}
 		// console.log({key,expected});
-	
-		let timer: NodeJS.Timeout | null = null;
-		let gameStart: number | null = null;
-		if (!timer && isLetter) {
-			timer = setInterval(() => {
-				if (!gameStart) {
-					gameStart = (new Date()).getTime();
-				}
-				const currentTime = (new Date()).getTime();
-				const msPassed = currentTime - gameStart;
-				const sPassed = Math.round(msPassed / 1000);
-				const sLeft = Math.round((gameTime / 1000) - sPassed - 1);
-				if (sLeft <= 0) {
-					const cursorElement = document.querySelector('.cursor') as HTMLElement;
-					cursorElement.style.display = 'none';
-					gameOver();
-					return;
-				}
-				const infoElement = document.querySelector('.info') as HTMLElement;
-				infoElement.innerHTML = sLeft.toString();
-			}, 1000);
-		}
   
-		if (isLetter) {
+		if (wordLogic.isLetter) {
 			if (currentLetter) {
-			addClass(currentLetter, key === expected || key === alter_key[expected] ? 'correct' : 'incorrect');
-			if (expected === '_' && key === ' ') {
+			addClass(currentLetter, key === wordLogic.expected || key === alter_key[wordLogic.expected] ? 'correct' : 'incorrect');
+			if (wordLogic.expected === '_' && key === ' ') {
 				addClass(currentLetter, 'correct');
 				removeClass(currentLetter, 'incorrect');
 			}
@@ -88,18 +71,16 @@ export default function Game() {
 			}
 		}
   
-		if (isEnter) {
+		if (wordLogic.isEnter) {
 			removeClass(currentWord!, 'current');
 			addClass(currentWord!.nextSibling as HTMLElement, 'current');
-			if (currentLetter) {
-			removeClass(currentLetter, 'current');
-			}
+			if (currentLetter) removeClass(currentLetter, 'current');			
 			addClass((currentWord!.nextSibling as HTMLElement).children[1].firstChild as HTMLElement, 'current');
 			addClass(currentWord!.children[0] as HTMLElement, 'incorrect');
 		}
 	
-		if (isBackspace) {
-			if (currentLetter && isFirstLetter) {
+		if (wordLogic.isBackspace) {
+			if (currentLetter && wordLogic.isFirstLetter) {
 				// make previous word current, last letter current
 				removeClass(currentWord, 'current');
 				addClass(currentWord?.previousSibling as HTMLElement, 'current');
@@ -110,7 +91,7 @@ export default function Game() {
 				removeClass((currentWord?.previousSibling as HTMLElement)?.children[1].lastChild as HTMLElement, 'incorrect');
 				removeClass((currentWord?.previousSibling as HTMLElement)?.children[1].lastChild as HTMLElement, 'correct');
 			}
-			if (currentLetter && !isFirstLetter) {
+			if (currentLetter && !wordLogic.isFirstLetter) {
 				// move back one letter, invalidate letter
 				removeClass(currentLetter, 'current');
 				removeClass(currentLetter.previousSibling as HTMLElement, 'incorrect');
@@ -130,42 +111,82 @@ export default function Game() {
 		}
 	
 		// Move lines / words
-		if (isLastLetter && (currentWord!.nextSibling as HTMLElement).getBoundingClientRect().top > 430 || currentWord!.getBoundingClientRect().top > 430) {
-			document.getElementById('cursor')!.style.display = 'none';
-			const words = document.getElementById('words')!;
-			const margin = parseInt(words.style.marginTop || '0px');
-			words.style.marginTop = (margin - 95) + 'px';
-			for (let i = 0; i < 10; i++) {
-			document.getElementById('words')!.innerHTML += formatWord();
+		if (wordLogic.isLastLetter && (currentWord!.nextSibling as HTMLElement).getBoundingClientRect().top > 430 || currentWord!.getBoundingClientRect().top > 430) {
+
+			cursor.style.display = 'none';
+			const wordsContainer = document.querySelector(`.${styles.words}`) as HTMLElement;
+			if (wordsContainer) {
+			  const margin = parseInt(wordsContainer.style.marginTop || '0px');
+			  wordsContainer.style.marginTop = (margin - 95) + 'px';
+			  for (let i = 0; i < 7; i++) {
+				wordsContainer.innerHTML += formatWord();
+			  }
 			}
-			document.getElementById('cursor')!.style.display = 'flex';
+			cursor.style.display = 'flex';
+		}
+
+		// Move cursor
+		moveCursor(cursor);
+
+	},[isGameStarted]);
+
+	useEffect(() => {
+        document.addEventListener('keydown', handleKeydown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeydown);
+        };
+    }, [handleKeydown]);
+
+	useEffect(() => {
+		let timerId: NodeJS.Timeout;
+		if (isGameStarted && gameTime > 0) {
+		  timerId = setInterval(() => {
+			// console.log("time: ", gameTime);
+			setGameTime((prevTime) => prevTime - 1);
+			const infoElement = document.querySelector(`.${styles.info}`) as HTMLElement;
+			infoElement.innerHTML = (gameTime-1).toString();
+		  }, 1000);
+		}
+		else if (gameTime === 0 && !gameOverState) {
+			console.log("time = 0");
+			gameOver();
+			setGameOverState(true);
+			setIsGameStarted(false);
 		}
 	
-		// Move cursor
-		const nextLetter = document.querySelector('.letter.current');
-		const nextWord = document.querySelector('.word-box.current')?.children[1];
-		const cursor = document.querySelector('.cursor') as HTMLElement;
-		if (nextLetter && nextLetter.getBoundingClientRect().top < 430) {
-			cursor.style.top = (nextLetter || nextWord)?.getBoundingClientRect().top + 5 + 'px';
-		}
-		cursor.style.left = (nextLetter || nextWord)?.getBoundingClientRect()[nextLetter ? 'left' : 'right'] + 'px';
+		return () => {
+		  if (timerId) {
+			clearInterval(timerId);
+		  }
+		};
+	}, [isGameStarted, gameTime]);
 
+	const handleTimeButtonClick = (time: number) => {
+		setIsGameStarted(false); // Stop the game
+		setGameTime(time); // Set the game time in logic.ts
+		const infoElement = document.querySelector(`.${styles.info}`) as HTMLElement;
+		infoElement.innerHTML = time.toString();
+		newGame(); // Restart the game with the new time
 	};
+	if (gameTime===0 && gameOverState){
+		// console.log("game over!!!!!");
+		return <GameOverComponent />;
+	}
 	return (
-    <main className={styles.main}>
-      <h1 className={styles.page_title}>wei4r.type</h1>
+	  <>
       <div className={styles.header}>
-        <div className={styles.info}></div>
+        <div className={styles.info}>30</div>
         <div className={styles.buttons}>
-          <button className={styles.time_button}>15</button>
-          <button className={styles.time_button}>30</button>
-          <button className={styles.time_button}>60</button>
+          <button className={styles.time_button}  onClick={() => handleTimeButtonClick(15)}>15</button>
+          <button className={styles.time_button}  onClick={() => handleTimeButtonClick(30)}>30</button>
+          <button className={styles.time_button}  onClick={() => handleTimeButtonClick(60)}>60</button>
         </div>
       </div>
       <div className={styles.reminder}>按下Enter以跳過詞彙</div>
-      <div className={styles.game} tabIndex={0}>
+      <div className={styles.game} tabIndex={0} ref={gameRef}>
           <div className={styles.words} ></div>
-          <div className={styles.cursor}></div>
+          <div className={styles.cursor} ref={cursorRef}></div>
           <div className={styles.focus_error}>Click here to focus</div>
           <div className={styles.result}>
               <div>
@@ -183,6 +204,6 @@ export default function Game() {
       <div className={styles.buttons}>
           <button className={styles.newGameBtn}>New game</button>
       </div>
-    </main>
+    </>
   );
 }

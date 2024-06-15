@@ -4,85 +4,81 @@ export const words = 'ㄞˋㄉㄞˋ,ㄞˋㄍㄨㄛˊ,ㄞˋㄗ_ㄅㄧㄥˋ,ㄢ_�
 export const wordsCount = words.length;
 export const alter_key: Record<string, string> = {'ㄅ':'1','ㄆ':'q','ㄇ':'a','ㄈ':'z','ㄉ':'2','ㄊ':'w','ㄋ':'s','ㄌ':'x','ˇ':'3','ㄍ':'e','ㄎ':'d','ㄏ':'c','ˋ':'4','ㄐ':'r','ㄑ':'f','ㄒ':'v','ㄓ':'5','ㄔ':'t','ㄕ':'g','ㄖ':'b','ˊ':'6','ㄗ':'y','ㄘ':'h','ㄙ':'n','˙':'7','ㄧ':'u','ㄨ':'j','ㄩ':'m','ㄚ':'8','ㄛ':'i','ㄜ':'k','ㄝ':',','ㄞ':'9','ㄟ':'o','ㄠ':'l','ㄡ':'.','ㄢ':'0','ㄣ':'p','ㄤ':';','ㄥ':'/','ㄦ':'-'};
 export let gameTime = 30 * 1000;
-export let timer: NodeJS.Timeout | null = null;
-export let gameStart: number | null = null;
 
 export function addClass(el: HTMLElement, name: string) {
-	if (!el.classList.contains(name)) {
-	  el.className += ' ' + name;
+	const className = styles[name];
+	if (!el.classList.contains(className)) {
+	  el.className += ' ' + className;
 	}
-  }
-  
-  export function removeClass(el: HTMLElement, name: string) {
-	const regex = new RegExp(`\\b${name}\\b`, 'g');
-	el.className = el.className.replace(regex, '').trim();
-  }
+}
+
+export function removeClass(el: HTMLElement, name: string) {
+	const className = styles[name];
+	if (el.classList.contains(className)) {
+		el.classList.remove(className);
+	}
+}
 
 export function formatWord() {
-	console.log("check format word");
-  const randomIndex = Math.ceil(Math.random() * wordsCount) - 1;
-  return `<div class="word-box"> <div class="chinese">${whole_word[randomIndex]}</div> <div class="zh"><span class="letter">${words[randomIndex].split('').join('</span><span class="letter">')}</span></div> </div>`;
-}
+	// console.log("check format word");
+	const randomIndex = Math.ceil(Math.random() * wordsCount) - 1;
+	return `<div class="${styles.word_box}"> <div class="${styles.chinese}">${whole_word[randomIndex]}</div> <div class="${styles.zh}"><span class="${styles.letter}">${words[randomIndex].split('').join(`</span><span class="${styles.letter}">`)}</span></div> </div>`;
+  }
 
 export function newGame() {
 	console.log("check new game");
-	const ingameElements = document.getElementsByClassName('ingame');
+	const ingameElements = document.getElementsByClassName(styles.ingame);
     for (let i = 0; i < ingameElements.length; i++) {
         (ingameElements[i] as HTMLElement).style.display = 'flex';
     } 
-	const outgameElements = document.getElementsByClassName('outgame');
+	const outgameElements = document.getElementsByClassName(styles.outgame);
     for (let i = 0; i < outgameElements.length; i++) {
         (outgameElements[i] as HTMLElement).style.display = 'none';
     }
-	console.log("check new game 2");
+	// console.log("ingameElements: ",ingameElements);
+	// console.log("check new game 2");
 	
     // Refresh words
     const check_title: HTMLCollection | null = document.getElementsByClassName(styles.page_title);
-	console.log("check title", check_title);
+	// console.log("check title", check_title);
     const wordsContainer: HTMLElement | null = document.querySelector(`.${styles.words}`);
-    console.log("wordsContainer", wordsContainer);
+    // console.log("wordsContainer", wordsContainer);
 	if (wordsContainer) {
         wordsContainer.innerHTML = '';
         for (let i = 0; i < 30; i++) {
             wordsContainer.innerHTML += formatWord();
         }
     }
-	console.log("check new game 3");
+	// console.log("check new game 3");
 
     const firstWordBox: HTMLElement | null = document.querySelector(`.${styles.word_box}`);
-    if (firstWordBox) {
+    // console.log("firstWordBox", firstWordBox);
+	if (firstWordBox) {
         addClass(firstWordBox, 'current');
+		// console.log("check new game 4");
     }
 
-    const firstLetter: HTMLElement | null = document.querySelector('.letter');
+    const firstLetter: HTMLElement | null = document.querySelector(`.${styles.letter}`);
     if (firstLetter) {
+		// console.log("firstLetter: ", firstLetter.innerHTML);
         addClass(firstLetter, 'current');
     }
 
-    const infoElement: HTMLElement | null = document.getElementById('info');
-    if (infoElement) {
-        infoElement.innerHTML = (gameTime / 1000).toString();
-    }
-
-    const gameElement: HTMLElement | null = document.getElementById('game');
+    const gameElement: HTMLElement | null = document.querySelector(`.${styles.game}`);
     if (gameElement) {
         while (gameElement.classList.contains('over')) {
             removeClass(gameElement, 'over');
         }
     }
 
-    if (wordsContainer) {
-        wordsContainer.style.margin = '0 5px';
-    }
-
-	timer = null;
-    gameStart = null;
-
     // Initialize cursor
-    const nextLetter: HTMLElement | null = document.querySelector('.letter');
-    const nextWord: Element | undefined = document.querySelector('.word-box.current')?.children[1];
-    const cursor: HTMLElement | null = document.getElementById('cursor');
-    if (cursor && nextLetter) {
+    const nextLetter: HTMLElement | null = document.querySelector(`.${styles.letter}`);
+	const nextWord: HTMLElement | null = document.querySelector(`.${styles.word_box}.${styles.current}`)?.nextSibling as HTMLElement | null;
+    const cursor: HTMLElement | null = document.querySelector(`.${styles.cursor}`);
+    // console.log("nextLetter", nextLetter);
+	// console.log("nextWord", nextWord);
+	// console.log("cursor", cursor);
+	if (cursor && nextLetter) {
         cursor.style.top = (nextLetter.getBoundingClientRect().top + 5) + 'px';
         cursor.style.left = nextLetter.getBoundingClientRect().left + 'px';
     } else if (cursor && nextWord) {
@@ -94,8 +90,11 @@ export function newGame() {
     }
 }
 export function getResult(): [number, number] {
-    const correctWords: NodeListOf<HTMLElement> = document.querySelectorAll('.chinese.correct') as NodeListOf<HTMLElement>;
-    const incorrectWords: NodeListOf<HTMLElement> = document.querySelectorAll('.chinese.incorrect') as NodeListOf<HTMLElement>;
+    const correctClassName = `${styles.chinese} ${styles.correct}`;
+    const incorrectClassName = `${styles.chinese} ${styles.incorrect}`;
+
+	const correctWords = document.getElementsByClassName(correctClassName) as HTMLCollectionOf<HTMLElement>;
+    const incorrectWords = document.getElementsByClassName(incorrectClassName) as HTMLCollectionOf<HTMLElement>;
 
     let correctWordNum = 0;
     let incorrectWordNum = 0;
@@ -116,40 +115,35 @@ export function getResult(): [number, number] {
 }
 
 export function gameOver(): void {
-    console.log('game over');
-    if(timer){
-		clearInterval(timer);
-		timer = null;
-	}
 
-    const ingameElements: HTMLCollectionOf<HTMLElement> = document.getElementsByClassName('ingame') as HTMLCollectionOf<HTMLElement>;
-    for (let i = 0; i < ingameElements.length; i++) {
-        ingameElements[i].style.display = 'none';
-    }
+    // const ingameElements = document.getElementsByClassName(styles.ingame) as HTMLCollectionOf<HTMLElement>;
+    // for (let i = 0; i < ingameElements.length; i++) {
+    //     ingameElements[i].style.display = 'none';
+    // }
 
-    const outgameElements: HTMLCollectionOf<HTMLElement> = document.getElementsByClassName('outgame') as HTMLCollectionOf<HTMLElement>;
-    for (let i = 0; i < outgameElements.length; i++) {
-        outgameElements[i].style.display = 'flex';
-    }
+    // const outgameElements = document.getElementsByClassName(styles.outgame) as HTMLCollectionOf<HTMLElement>;
+    // for (let i = 0; i < outgameElements.length; i++) {
+    //     outgameElements[i].style.display = 'flex';
+    // }
 
-    const infoElement: HTMLElement | null = document.querySelector('.info');
+    const infoElement = document.querySelector(`.${styles.info}`);
     if (infoElement) {
         infoElement.innerHTML = '';
     }
 
-    const gameElement: HTMLElement | null = document.querySelector('.game');
+    const gameElement: HTMLElement | null = document.querySelector(`.${styles.game}`);
     if (gameElement) {
-        addClass(gameElement, 'over');
+        addClass(gameElement, styles.over);
     }
 
     const [wpm, acc] = getResult();
 
-    const wpmElement: HTMLElement | null = document.querySelector('.wpm');
+    const wpmElement = document.querySelector(`.${styles.wpm}`);
     if (wpmElement) {
         wpmElement.innerHTML = `${wpm}<br>`;
     }
 
-    const accElement: HTMLElement | null = document.querySelector('.acc');
+    const accElement = document.querySelector(`.${styles.acc}`);
     if (accElement) {
         accElement.innerHTML = `${acc}%`;
     }
@@ -158,15 +152,43 @@ export function gameOver(): void {
 export function checkCorrect(thisLetter: HTMLElement): boolean {
     let flag: Node | null = thisLetter;
     while (flag?.previousSibling) {
-        if ((flag as HTMLElement).classList.contains('incorrect')) {
+        if ((flag as HTMLElement).classList.contains(styles.incorrect)) {
             return false;
         }
         flag = flag.previousSibling;
     }
-    if ((flag as HTMLElement)?.classList.contains('incorrect')) {
+
+    if ((flag as HTMLElement)?.classList.contains(styles.incorrect)) {
         return false;
     }
     return true;
 }
 
-  
+export function moveCursor(cursor: HTMLElement) {
+    const nextLetter = document.querySelector(`.${styles.letter}.${styles.current}`) as HTMLElement;
+    const nextWord = document.querySelector(`.${styles.word_box}.${styles.current}`) as HTMLElement;
+    
+    if (nextLetter && nextLetter.getBoundingClientRect().top < 430) {
+        cursor.style.top = (nextLetter || nextWord?.children[1])?.getBoundingClientRect().top + 5 + 'px';
+    }
+    cursor.style.left = (nextLetter || nextWord?.children[1])?.getBoundingClientRect()[nextLetter ? 'left' : 'right'] + 'px';
+}
+
+export const handleWordLogic = (key: string, currentWord: HTMLElement, currentLetter: HTMLElement, cursor: HTMLElement) => {
+    const expected = currentLetter?.innerHTML || 'Enter';
+    const isLetter = key.length === 1 && key !== 'Meta' && key !== 'CapsLock';
+    const isEnter = key === 'Enter';
+    const isBackspace = key === 'Backspace';
+    const isFirstLetter = currentLetter === currentWord?.children[1]?.children[0];
+    const isLastLetter = currentLetter === currentWord?.children[1]?.lastChild;
+
+    return {
+        isLetter,
+        isEnter,
+        isBackspace,
+        isFirstLetter,
+        isLastLetter,
+        isCorrect: key === expected || key === alter_key[expected],
+        expected
+    };
+};

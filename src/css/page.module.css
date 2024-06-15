@@ -26,14 +26,14 @@
 .newGameBtn{
     width: 150px;
 }
-div#game{
+div .game{
     margin: 8%;
     line-height:35px;
     height:285px;
     overflow: hidden;
     position: relative;
 }
-div#game:focus{
+div .game:focus{
     outline:0;
 }
 .words{
@@ -48,8 +48,7 @@ div#game:focus{
 .game:focus .words{
     filter: blur(0);
 }
-.focus-error {
-    color: black;
+.focus_error {
     position: absolute;
     padding-top: 10%;
     inset: 0;
@@ -66,6 +65,7 @@ div.word{
     font-family: 'Roboto Mono', monospace;
     margin: 0 5px;
 }
+.letter{}
 .letter.correct{
     color: #fff;
 }
@@ -84,18 +84,19 @@ div.word{
     }
 }
 .cursor{
-    display:none;
-    width: 2px;
+    display:flex;
+    width: 3px;
     height: 1.6rem;
     background: var(--primaryColor);
     position: fixed;
     border-radius:10px;
-    transition: all .25s ease;
+    transition: all .15s ease;
     animation: blink .9s infinite;
 }
 .game.over .words{
     opacity: .5;
     filter: blur(0px);
+    margin: 0 5px;
 }
 .game.over .focus-error {
     display: none;
@@ -170,4 +171,7 @@ div.word{
 }
 .restart_reminder{
     display: none;
+}
+.current{
+  
 }
