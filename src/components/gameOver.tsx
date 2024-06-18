@@ -3,9 +3,16 @@ import "../css/globals.css";
 import styles from "../css/page.module.css";
 const GameOverComponent: React.FC = () => {
     return (
+      <div className={styles.result}>
         <div>
-            <h1>Game Over</h1>
+          <div className={styles.title}>wpm</div>
+          <div className={styles.wpm}></div>
         </div>
+        <div>
+          <div className={styles.title}> accuracy </div>
+          <div className={styles.acc}></div>
+        </div>
+      </div>
     );
 };
 

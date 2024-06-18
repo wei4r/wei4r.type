@@ -1,17 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&family=Poppins:wght@400;500;600&display=swap');
-.page_title{
+.header{
+    /* background-color: #fff; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     height: 50px;
+    margin: 20px 0 20px 0;
+}
+.github_logo{
+    height: 32px;
+    width: auto;
+    margin-top: 16px;
+}
+.page_title{
+    /* height: 50px; */
     padding: 0;
     color: var(--primaryColor);
     justify-content: center;
-    margin: 32px 0;
+    padding-bottom: 12px;
+    /* margin: 32px 0; */
 }
-.header{
+.top{
     display: flex;
     margin: 0 auto;
 }
 .buttons{
     text-align: center;
+    /* display: flex; */
+    /* gap: 5px; */
 }
 .info{
     margin-top: 2px;
@@ -21,12 +37,13 @@
 .time_button{
     height: 30px;
     width: 45px;
+    margin: 0 4px;
 }
 
 .newGameBtn{
     width: 150px;
 }
-div .game{
+.game{
     margin: 8%;
     line-height:35px;
     height:285px;
@@ -161,6 +178,7 @@ div.word{
 }
 
 .reminder{
+    margin: 2% 0;
     height: 30px;
     display: flex;
     left:  45%;
