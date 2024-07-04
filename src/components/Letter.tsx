@@ -8,10 +8,12 @@ interface LetterProps {
 }
 
 const Letter: React.FC<LetterProps> = ({ letterObj }) => {
-  const { letter, isCorrect } = letterObj;
-
+  const { letter, isCorrect, current } = letterObj;
   return (
-    <span className={styles.letter}>
+    <span className={`${styles.letter} 
+                      ${isCorrect === null ? '' : isCorrect ? styles.correct : styles.incorrect}
+                      ${current === true ? 'current' : ''}
+                      `}>
       {letter}
     </span>
   );

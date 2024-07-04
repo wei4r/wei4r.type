@@ -29,7 +29,7 @@
     /* display: flex; */
     /* gap: 5px; */
 }
-.info{
+.timer{
     margin-top: 2px;
     width: 7%;
     color: var(--primaryColor);
@@ -72,7 +72,7 @@ div .game:focus{
     text-align: center;
     font-size: 2.5rem;
     font-weight: 100;
-
+    /* display:none; */
 }
 .game:focus .focus_error{
     display:none;
@@ -82,11 +82,13 @@ div.word{
     font-family: 'Roboto Mono', monospace;
     margin: 0 5px;
 }
-.letter{}
-.letter.correct{
+.letter{
+    font-size: 20px;
+}
+.correct{
     color: #fff;
 }
-.letter.incorrect{
+.incorrect{
     color: #f55;
 }
 @keyframes blink{
@@ -103,26 +105,16 @@ div.word{
 .cursor{
     display:flex;
     width: 3px;
-    height: 1.6rem;
+    height: 24px;
     background: var(--primaryColor);
     position: fixed;
     border-radius:10px;
     transition: all .15s ease;
     animation: blink .9s infinite;
 }
-.game.over .words{
-    opacity: .5;
-    filter: blur(0px);
-    margin: 0 5px;
-}
-.game.over .focus-error {
-    display: none;
-}
-
 
 .word_box{
     display: inline-block;
-    font-size:20px;
     min-width:155px;
     border-width:0px;
     height: 95px;
@@ -141,10 +133,10 @@ div.word{
 
 
 .chinese.correct{
-    /*color: #fff;*/
     color: var(--primaryColor);
 }
 .chinese{
+    font-size:24px;
     display: flex;
     justify-content: center; 
     align-items: center; 
@@ -154,10 +146,10 @@ div.word{
     color: #f55;
 }
 .result{
-    padding-top: 5%;
-    font-family: 'Roboto', sans-serif;
+    height: 380px;
+    margin-bottom: 56px;
     color: var(--primaryColor);
-    display: none;
+    display: flex;
     font-size: 4rem;
     justify-content: center; 
     align-items: center; 

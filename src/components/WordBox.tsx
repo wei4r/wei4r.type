@@ -9,9 +9,13 @@ interface WordProps {
 }
 const WordBox: React.FC<WordProps> = ({wordObj}) => {
   const { word, letterArr, isCorrect, isSkip } = wordObj;  
+
   return (
     <div className={styles.word_box}>
-      <div className={styles.chinese}>{wordObj.word}</div>
+      <div className={`${styles.chinese} ${isCorrect === null ? '' : isCorrect ? styles.correct : styles.incorrect}`}>
+        {wordObj.word}
+      </div>
+      {/* <div className={styles.chinese}></div> */}
       <div className={styles.zh}>
         {letterArr.map((letterObj, index) => (
           <Letter key={index} letterObj={letterObj} />
