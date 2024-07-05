@@ -12,12 +12,18 @@ export default function Result({scoreboard, time}: ResultProps){
   return (
     <div className={styles.result}>
       <div>
-        <div className={styles.title}>WPM</div>
+        <div className={styles.title}>
+          <span style={{ color: "white" }}>WPM</span>
+          <span>&nbsp;(每分鐘字數)</span>
+        </div>
         <div>{(words/(time/60000)).toFixed(0)}</div>
       </div>
       <div>
-        <div className={styles.title}> Accuracy </div>
-        <div className={styles.acc}>{((scoreboard[0]/words)*100).toFixed(2)}%</div>
+        <div className={styles.title}>
+          <span style={{ color: "white" }}> Accuracy</span>
+          <span>&nbsp;(正確率)</span>
+        </div>
+        <div className={styles.acc}>{((scoreboard[0]/words)*100).toFixed(0)}%</div>
       </div>
     </div>
   );

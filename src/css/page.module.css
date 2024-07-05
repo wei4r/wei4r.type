@@ -60,7 +60,6 @@ div .game:focus{
     justify-content: space-evenly;
     filter: blur(5px);
     color: var(--textSecondary);
-    transition: all .25s ease;
 }
 .game:focus .words{
     filter: blur(0);
@@ -123,6 +122,7 @@ div.word{
     overflow:hidden;
     user-select:none;
     flex-wrap: nowrap;
+    transition: all .25s ease;
 }
 
 .zh{
@@ -147,7 +147,8 @@ div.word{
 }
 .result{
     height: 380px;
-    margin-bottom: 56px;
+    margin-top: 30px;
+    margin-bottom: 67px;
     color: var(--primaryColor);
     display: flex;
     font-size: 4rem;
@@ -164,7 +165,7 @@ div.word{
 }
 .title{
     color:#666;
-    width: 120px;
+    /* width: 120px; */
     height:60px;
     font-size: 2.5rem;
 }
@@ -184,4 +185,12 @@ div.word{
 }
 .current{
   
+}
+.github_link{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    color: #999;
 }

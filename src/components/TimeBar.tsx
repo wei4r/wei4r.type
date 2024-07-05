@@ -18,7 +18,7 @@ export default function TimeBar({ time, setTime, restart }: TimeBarProps){
       <div className={styles.top}>
         {time > 0 && <div className={styles.timer}>{time/1000}</div>}
         <div className={styles.buttons}>
-          <button className={styles.time_button}  onClick={() => handleTimeButton(5000)}>5</button>
+          <button className={styles.time_button}  onClick={() => handleTimeButton(5000)}>15</button>
           <button className={styles.time_button}  onClick={() => handleTimeButton(30000)}>30</button>
           <button className={styles.time_button}  onClick={() => handleTimeButton(60000)}>60</button>
         </div>

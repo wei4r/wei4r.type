@@ -26,7 +26,29 @@ const useTypingGame = () => {
     }
 
     if (key === 'Backspace') {
-      if (cursorPosition <= 0) return;
+      if (cursorPosition === 0 && currentWordIndex > 0) {
+        // At the start of a word, go back
+        const previousWordIndex = currentWordIndex - 1;
+        const previousWord = wordObjs[previousWordIndex];
+        
+        if (!previousWord.isCorrect) {
+          // Previous word is incorrect, move back
+          setCurrentWordIndex(previousWordIndex);
+          setCursorPosition(previousWord.letterArr.length - 1);
+          setUserInput(previousWord.word.slice(0, -1));
+          const updatedWordObjs = [...wordObjs];
+          // Reset the current word
+          updatedWordObjs[currentWordIndex].letterArr[0].current=false;
+          // Set the last letter of the previous word as current
+          updatedWordObjs[previousWordIndex].letterArr[previousWord.letterArr.length - 1].current = true;
+          updatedWordObjs[previousWordIndex].letterArr[previousWord.letterArr.length - 1].isCorrect = null;
+          setWordObjs(updatedWordObjs);
+        }
+        // If previous word is correct, do nothing
+        updateCursor(cursorRef);
+        return;
+      }
+      if (cursorPosition < 0) return;
       setUserInput((prev) => prev.slice(0, -1));
       setCursorPosition((prev) => prev - 1);
 
@@ -37,7 +59,6 @@ const useTypingGame = () => {
       updateCursor(cursorRef);
       return;
     }
-
 
     setUserInput((prev) => prev + key);
     setCursorPosition((prev) => prev + 1);
@@ -53,7 +74,6 @@ const useTypingGame = () => {
       // console.log(updatedWordObjs[currentWordIndex] );
       if (updatedWordObjs[currentWordIndex].isCorrect)setScoreboard(prev => [prev[0]+updatedWordObjs[currentWordIndex].word.length, prev[1]]);
       else setScoreboard(prev => [prev[0], prev[1]+updatedWordObjs[currentWordIndex].word.length]);
-      console.log(scoreboard);
 
       const nextWordIndex = currentWordIndex + 1;
       setCurrentWordIndex(nextWordIndex);
@@ -77,7 +97,6 @@ const useTypingGame = () => {
 
   useEffect(() => {   // Change Line
     if(currentWordIndex>=2*wordsPerLine){
-      console.log("Change Line");
       const newWords = getRandomWords(wordsPerLine);
       setWordObjs(prev => [...prev.slice(wordsPerLine), ...newWords]);
       setCurrentWordIndex(prev => prev - wordsPerLine);
@@ -86,15 +105,21 @@ const useTypingGame = () => {
     }
   }, [currentWordIndex]);
 
+
   useEffect(() => {   // Update wordsPerLine based on window width
-    updateCursor(cursorRef);
     const handleResize = () => {
-      if (window.innerWidth < 1165) {
+      updateCursor(cursorRef);
+      if (window.innerWidth < 777) {
+        setWordsPerLine(3);
+      } 
+      else if (window.innerWidth < 972) {
+        setWordsPerLine(4);
+      }
+      else if (window.innerWidth < 1165) {
         setWordsPerLine(5);
       } else {
         setWordsPerLine(6);
       }
-      // console.log(wordsPerLine, innerWidth);
     };
 
     handleResize();
