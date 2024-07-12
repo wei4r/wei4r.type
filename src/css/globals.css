@@ -1,5 +1,5 @@
 :root {
-  --max-width: 1100px;
+  --max-width: 1400px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
@@ -40,7 +40,7 @@
   --card-border-rgb: 131, 134, 135;
 
 
-  --bgColor: rgb(5, 11, 31);
+  --bgColor: #050B1F;
   --textPrimary: #fff;
   --textSecondary: #666;
   --primaryColor: #ffde59;
@@ -84,7 +84,8 @@
 }
 html,
 body {
-  max-width: 100%;
+  max-width: var(--max-width);
+  max-height: 100%;
   overflow-x: hidden;
   margin: 0;
 }

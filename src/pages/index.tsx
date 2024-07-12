@@ -6,9 +6,9 @@ import MobileNotSupported from '../components/MobileNotSupported';
 
 
 export default function App() {
-  const isMobile = useDetectDevice(); // Move this line inside the App component
+  const isMobile = useDetectDevice();
   return (
-    <>
+    <div className={styles.main}>
       <Head>
         <title>wei4r.type</title>
       </Head>
@@ -23,6 +23,6 @@ export default function App() {
         )}      
 
       </main>
-    </>
+    </div>
   );
 }

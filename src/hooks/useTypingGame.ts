@@ -12,7 +12,7 @@ const useTypingGame = () => {
   const [userInput, setUserInput] = useState<string>('');
   const [cursorPosition, setCursorPosition] = useState<number>(0);
   const [typingState, setTypingState] = useState<TypingState>('idle');
-  const [wordsPerLine, setWordsPerLine] = useState<number>(6);
+  const [wordsPerLine, setWordsPerLine] = useState<number>(1);
   const [scoreboard, setScoreboard] = useState<number[]>([0,0]);
   const cursorRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<HTMLDivElement>(null);
@@ -108,17 +108,22 @@ const useTypingGame = () => {
 
   useEffect(() => {   // Update wordsPerLine based on window width
     const handleResize = () => {
+      // console.log(window.innerWidth);
       updateCursor(cursorRef);
-      if (window.innerWidth < 777) {
+      if (window.innerWidth < 710) {
         setWordsPerLine(3);
       } 
-      else if (window.innerWidth < 972) {
+      else if (window.innerWidth < 887) {
         setWordsPerLine(4);
       }
-      else if (window.innerWidth < 1165) {
+      else if (window.innerWidth < 1065) {
         setWordsPerLine(5);
-      } else {
+
+      } else if (window.innerWidth < 1242) {
         setWordsPerLine(6);
+      }
+      else {
+        setWordsPerLine(7);
       }
     };
 

@@ -18,7 +18,7 @@ export default function Game() {
   }, []);
 
 	return (
-	  <>
+	  <div>
 			<Header/>
 			<TimeBar time={countdown} setTime={setTime} restart={restart}/>
 			{countdown > 0 ? 
@@ -26,6 +26,6 @@ export default function Game() {
 				: <Result scoreboard={scoreboard} time={time}/>
 			}
 			<Restart restart={restart}/>
-    </>
+    </div>
   );
 }

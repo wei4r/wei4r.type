@@ -44,7 +44,8 @@
     width: 150px;
 }
 .game{
-    margin: 8%;
+    margin: 10% 4% 6% 4%;
+    /* margin: 8%; */
     line-height:35px;
     height:285px;
     overflow: hidden;
@@ -194,3 +195,11 @@ div.word{
     margin-top: 20px;
     color: #999;
 }
+
+/* .container {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    height: 100%;
+    margin: 0;
+} */
