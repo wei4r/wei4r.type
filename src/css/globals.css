@@ -82,6 +82,10 @@
   padding: 0;
   margin: 0;
 }
+html{
+  display: flex;
+  justify-content: center;
+}
 html,
 body {
   max-width: var(--max-width);

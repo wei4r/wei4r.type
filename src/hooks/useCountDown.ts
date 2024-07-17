@@ -20,7 +20,7 @@ export const useCountdown = (time: number, interval = 1000) => {
   }, [interval]);
 
   const resetCountdown = useCallback(() => {
-    console.log("resetCountdown");
+    // console.log("resetCountdown");
     clearInterval(intervalRef.current as NodeJS.Timeout);
     intervalRef.current = null;
     setCountdown(time);

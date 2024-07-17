@@ -105,32 +105,29 @@ const useTypingGame = () => {
     }
   }, [currentWordIndex]);
 
-
-  useEffect(() => {   // Update wordsPerLine based on window width
+  const updateWordsPerLine = useCallback(() => {
+    if (window.innerWidth < 710) {
+      setWordsPerLine(3);
+    } else if (window.innerWidth < 887) {
+      setWordsPerLine(4);
+    } else if (window.innerWidth < 1065) {
+      setWordsPerLine(5);
+    } else if (window.innerWidth < 1242) {
+      setWordsPerLine(6);
+    } else {
+      setWordsPerLine(7);
+    }
+  }, []);
+  useEffect(() => {
     const handleResize = () => {
-      // console.log(window.innerWidth);
       updateCursor(cursorRef);
-      if (window.innerWidth < 710) {
-        setWordsPerLine(3);
-      } 
-      else if (window.innerWidth < 887) {
-        setWordsPerLine(4);
-      }
-      else if (window.innerWidth < 1065) {
-        setWordsPerLine(5);
-
-      } else if (window.innerWidth < 1242) {
-        setWordsPerLine(6);
-      }
-      else {
-        setWordsPerLine(7);
-      }
+      updateWordsPerLine();
     };
-
-    handleResize();
+  
+    handleResize(); // Initial call
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [updateWordsPerLine]);
 
   const reset = () => { // Reset the game
     setWordObjs([]);

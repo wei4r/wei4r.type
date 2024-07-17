@@ -16,7 +16,7 @@ export function updateCursor(cursorRef: React.MutableRefObject<HTMLDivElement | 
         if (top > last_top) {
             last_top = top;
             if(!initialize){
-                console.log("initialize");
+                // console.log("initialize");
                 initialize=true;
             }
             else{
@@ -80,7 +80,7 @@ export const moveCurrent = (currentWordObj:WordObj, cursorPosition:number, direc
 }
 
 export const initializeGame = (setWordObjs: (words: any) => void, gameRef: React.RefObject<HTMLDivElement>) => {
-    const randomWords = getRandomWords(20);
+    const randomWords = getRandomWords(25);
     randomWords[0].letterArr[0].current = true;
     setWordObjs(randomWords);
     if (gameRef.current) gameRef.current.focus();
