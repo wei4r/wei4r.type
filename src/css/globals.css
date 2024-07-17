@@ -88,8 +88,7 @@ html{
 }
 html,
 body {
-  max-width: var(--max-width);
-  max-height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
   margin: 0;
 }
@@ -97,16 +96,15 @@ main{
   width: 95%;
   max-width: 1200px;
   margin: 25px auto;
-  /*height:80vh;*/
   justify-content: center;
 }
 body {
+  max-width: var(--max-width);
   font-family: 'Noto Sans TC', sans-serif;
   font-weight: 500;
   background-color:var(--bgColor);
   color: var(--textPrimary);
   font-size: 1.4rem;
-  /*height: 95%;*/
 }
 
 button:hover{
