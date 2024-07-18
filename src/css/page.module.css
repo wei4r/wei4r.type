@@ -196,10 +196,17 @@ div.word{
     color: #999;
 }
 
-/* .container {
+.visit{
     display: flex;
-    flex-direction: column;
-    justify-content:flex-start;
-    height: 100%;
-    margin: 0;
-} */
+    justify-content: end;
+    position: fixed;
+    bottom: 4rem;
+    right: 4rem;
+    width: 100%;
+}
+.visitCount{
+    align-items: end;
+    color: #555;
+    font-size: 1rem;
+    
+}
