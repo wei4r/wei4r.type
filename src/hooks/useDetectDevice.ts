@@ -19,7 +19,7 @@ export const isMobile = () => {
       }
     }
   }
-  if (window.innerWidth < 768) return true;
+  if (window.innerWidth < 1000) return true;
   return false;
 };
 

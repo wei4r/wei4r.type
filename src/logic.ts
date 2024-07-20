@@ -7,7 +7,6 @@ export function checkCorrect(key:string, expected:string){
 let last_top = 0;
 let initialize=false;
 export function updateCursor(cursorRef: React.MutableRefObject<HTMLDivElement | null>){
-    // console.log("updateCursor");
     const currentLetter = document.querySelector(`.current`);
     if (currentLetter) {
       const { left, top, height } = currentLetter.getBoundingClientRect();
@@ -16,7 +15,6 @@ export function updateCursor(cursorRef: React.MutableRefObject<HTMLDivElement | 
         if (top > last_top) {
             last_top = top;
             if(!initialize){
-                // console.log("initialize");
                 initialize=true;
             }
             else{
@@ -102,7 +100,6 @@ export const incrementPageView = async (page: string) => {
       } else {
         const newCount = docSnap.data().count + 1;
         transaction.update(pageRef, { count: newCount });
-        // console.log("Page view incremented: ", newCount);
         return newCount; // Return updated count
       }
     });
@@ -112,3 +109,21 @@ export const incrementPageView = async (page: string) => {
     return null; // Handle error case
   }
 };
+
+const getYPosition = (cursorRef: React.MutableRefObject<HTMLDivElement | null>) => {
+  if (cursorRef.current) {
+    const rect = cursorRef.current.getBoundingClientRect();
+    return rect.top;
+  }
+  return 0;
+};
+
+const getXPosition = (cursorRef: React.MutableRefObject<HTMLDivElement | null>) => {
+  if (cursorRef.current) {
+    const rect = cursorRef.current.getBoundingClientRect();
+    return rect.left;
+  }
+  return 0;
+};
+
+export { getYPosition, getXPosition };

@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { getRandomWords, WordObj, validKeysSet } from '../utils';
-import { checkCorrect, updateCursor } from "../logic";
-import { updateWordCorrect, moveCurrent } from "../logic";
-import styles from "../css/page.module.css";
+import { updateCursor } from "../logic";
+import { updateWordCorrect, moveCurrent, getYPosition, getXPosition } from "../logic";
 
 type TypingState = 'idle' | 'start' | 'typing';
 
@@ -12,15 +11,16 @@ const useTypingGame = () => {
   const [userInput, setUserInput] = useState<string>('');
   const [cursorPosition, setCursorPosition] = useState<number>(0);
   const [typingState, setTypingState] = useState<TypingState>('idle');
-  const [wordsPerLine, setWordsPerLine] = useState<number>(1);
+  // const [wordsPerLine, setWordsPerLine] = useState<number>(1);
   const [scoreboard, setScoreboard] = useState<number[]>([0,0]);
   const cursorRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<HTMLDivElement>(null);
+  const [wordnum, setWordNum] = useState<number>(0);
+  const [rightmost, setRightmost] = useState<number>(0);
 
   const handleKeyDown = useCallback(({key, code}:KeyboardEvent) => {
-
-    // if (!acceptedKeys.includes(key) or ) return;
-    if (!validKeysSet.has(key))return;
+    if (gameRef.current && document.activeElement !== gameRef.current) gameRef.current.focus();
+    if (!validKeysSet.has(key)) return;
     if(typingState === 'idle'){
       setTypingState('start');
     }
@@ -68,10 +68,12 @@ const useTypingGame = () => {
     updatedWordObjs[currentWordIndex] = updateWordCorrect(currentWordObj);
     setWordObjs(updatedWordObjs);
 
+    if(getXPosition(cursorRef) > rightmost){ 
+      setRightmost(getXPosition(cursorRef));
+    }
+
     // Move to the next word if the current word is completed
     if (cursorPosition + 1 >= currentWordObj.letterArr.length) {
-      
-      // console.log(updatedWordObjs[currentWordIndex] );
       if (updatedWordObjs[currentWordIndex].isCorrect)setScoreboard(prev => [prev[0]+updatedWordObjs[currentWordIndex].word.length, prev[1]]);
       else setScoreboard(prev => [prev[0], prev[1]+updatedWordObjs[currentWordIndex].word.length]);
 
@@ -83,6 +85,24 @@ const useTypingGame = () => {
       setWordObjs(updatedWordObjs);
       setCursorPosition(0);
       setUserInput('');
+
+      // Handle Renew Words When Change to 3rd Line
+      const yPosition = getYPosition(cursorRef);
+      const xPosition = getXPosition(cursorRef);
+    
+      if (wordnum>0 && rightmost && xPosition>rightmost-70) {
+        const linesToRemove = wordnum;
+        setWordNum(currentWordIndex - linesToRemove+1);
+        const newWords = getRandomWords(linesToRemove);
+        setWordObjs(prev => [...prev.slice(linesToRemove), ...newWords]);
+        setCurrentWordIndex(prev => prev - linesToRemove);
+        setCursorPosition(0);
+        updateCursor(cursorRef);
+      } else if (yPosition > 297 && wordnum === 0) {
+        const firstLineWordCount = currentWordIndex;
+        setWordNum(firstLineWordCount);
+      }
+
     }
   }, [cursorPosition, wordObjs, currentWordIndex]);
 
@@ -95,40 +115,6 @@ const useTypingGame = () => {
     updateCursor(cursorRef);
   }, [userInput, wordObjs]);
 
-  useEffect(() => {   // Change Line
-    if(currentWordIndex>=2*wordsPerLine){
-      const newWords = getRandomWords(wordsPerLine);
-      setWordObjs(prev => [...prev.slice(wordsPerLine), ...newWords]);
-      setCurrentWordIndex(prev => prev - wordsPerLine);
-      setCursorPosition(0);
-      updateCursor(cursorRef);
-    }
-  }, [currentWordIndex]);
-
-  const updateWordsPerLine = useCallback(() => {
-    if (window.innerWidth < 710) {
-      setWordsPerLine(3);
-    } else if (window.innerWidth < 887) {
-      setWordsPerLine(4);
-    } else if (window.innerWidth < 1065) {
-      setWordsPerLine(5);
-    } else if (window.innerWidth < 1242) {
-      setWordsPerLine(6);
-    } else {
-      setWordsPerLine(7);
-    }
-  }, []);
-  useEffect(() => {
-    const handleResize = () => {
-      updateCursor(cursorRef);
-      updateWordsPerLine();
-    };
-  
-    handleResize(); // Initial call
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [updateWordsPerLine]);
-
   const reset = () => { // Reset the game
     setWordObjs([]);
     setCurrentWordIndex(0);
@@ -136,6 +122,8 @@ const useTypingGame = () => {
     setCursorPosition(0);
     setTypingState('idle');
     setScoreboard([0,0]);
+    updateCursor(cursorRef);
+    setWordNum(0);
   };
   return {
     wordObjs,

@@ -82,9 +82,6 @@ div.word{
     font-family: 'Roboto Mono', monospace;
     margin: 0 5px;
 }
-.letter{
-    font-size: 20px;
-}
 .correct{
     color: #fff;
 }
@@ -131,7 +128,9 @@ div.word{
     justify-content: center; 
     align-items: center; 
 }
-
+.letter{
+    font-size: 20px;
+}
 
 .chinese.correct{
     color: var(--primaryColor);
