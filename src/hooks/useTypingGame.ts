@@ -18,8 +18,12 @@ const useTypingGame = () => {
   const [wordnum, setWordNum] = useState<number>(0);
   const [rightmost, setRightmost] = useState<number>(0);
 
-  const handleKeyDown = useCallback(({key, code}:KeyboardEvent) => {
+  const handleKeyDown = useCallback((event:KeyboardEvent) => {
+    const {key, code} = event;
     if (gameRef.current && document.activeElement !== gameRef.current) gameRef.current.focus();
+    if (code === "Slash") {
+      event.preventDefault();
+    }
     if (!validKeysSet.has(key)) return;
     if(typingState === 'idle'){
       setTypingState('start');
