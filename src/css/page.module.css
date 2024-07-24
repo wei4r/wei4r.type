@@ -13,12 +13,10 @@
     margin-top: 16px;
 }
 .page_title{
-    /* height: 50px; */
     padding: 0;
     color: var(--primaryColor);
     justify-content: center;
     padding-bottom: 12px;
-    /* margin: 32px 0; */
 }
 .top{
     display: flex;
@@ -26,8 +24,6 @@
 }
 .buttons{
     text-align: center;
-    /* display: flex; */
-    /* gap: 5px; */
 }
 .timer{
     margin-top: 2px;
@@ -197,7 +193,7 @@ div.word{
 
 .visit{
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     position: fixed;
     bottom: 4rem;
     right: 4rem;
@@ -207,5 +203,4 @@ div.word{
     align-items: end;
     color: #555;
     font-size: 1rem;
-    
 }

@@ -4,20 +4,20 @@ import styles from "../css/page.module.css";
 import { useDetectDevice } from '../hooks/useDetectDevice';
 import MobileNotSupported from '../components/MobileNotSupported';
 import { useEffect, useState } from 'react';
-import { incrementPageView } from '../logic';
+// import { incrementPageView } from '../logic';
 
 export default function App() {
   const isMobile = useDetectDevice();
-  const [pageViews, setPageViews] = useState(0);
+  
+  const [visitCount, setVisitCount] = useState(null);
+
   useEffect(() => {
-    incrementPageView('homePage').then(count => {
-      if (count !== null) {
-        setPageViews(count);
-      }
-    });
+    fetch('/api/visit')
+      .then((response) => response.json())
+      .then((data) => setVisitCount(data.count))
+      .catch((error) => console.error('Error fetching visit count:', error));
   }, []);
-  
-  
+
   return (
     <div className={styles.main}>
       <Head>
@@ -30,7 +30,7 @@ export default function App() {
           <>
           <Game></Game>
           <div className={styles.visit}>
-            <div className={styles.visitCount}>訪問次數 / Total Visits: {pageViews}</div>
+            <div className={styles.visitCount}>訪問次數 / Total Visits: {visitCount}</div>
           </div>
           </>
           

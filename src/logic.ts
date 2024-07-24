@@ -84,32 +84,6 @@ export const initializeGame = (setWordObjs: (words: any) => void, gameRef: React
   if (gameRef.current) gameRef.current.focus();
 };
 
-
-import { db } from '../firebaseConfig';
-import { doc, runTransaction} from "firebase/firestore";
-export const incrementPageView = async (page: string) => {
-  const pageRef = doc(db, 'pageviews', page);
-
-  try {
-    const newCount = await runTransaction(db, async (transaction) => {
-      const docSnap = await transaction.get(pageRef);
-      if (!docSnap.exists()) {
-        console.log("Document does not exist, creating new one with count = 1");
-        transaction.set(pageRef, { count: 1 });
-        return 1; // Return new count
-      } else {
-        const newCount = docSnap.data().count + 1;
-        transaction.update(pageRef, { count: newCount });
-        return newCount; // Return updated count
-      }
-    });
-    return newCount;
-  } catch (error) {
-    console.error("Failed to increment page view: ", error);
-    return null; // Handle error case
-  }
-};
-
 const getYPosition = (cursorRef: React.MutableRefObject<HTMLDivElement | null>) => {
   if (cursorRef.current) {
     const rect = cursorRef.current.getBoundingClientRect();
