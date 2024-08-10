@@ -3,7 +3,7 @@ import { getRandomWords, WordObj, validKeysSet } from '../utils';
 import { updateCursor } from "../logic";
 import { updateWordCorrect, moveCurrent, getYPosition, getXPosition } from "../logic";
 
-type TypingState = 'idle' | 'start' | 'typing';
+type TypingState = 'idle' | 'start' | 'typing' | 'end';
 
 const useTypingGame = () => {
   const [wordObjs, setWordObjs] = useState<WordObj[]>([]);
@@ -11,7 +11,6 @@ const useTypingGame = () => {
   const [userInput, setUserInput] = useState<string>('');
   const [cursorPosition, setCursorPosition] = useState<number>(0);
   const [typingState, setTypingState] = useState<TypingState>('idle');
-  // const [wordsPerLine, setWordsPerLine] = useState<number>(1);
   const [scoreboard, setScoreboard] = useState<number[]>([0,0]);
   const cursorRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<HTMLDivElement>(null);
@@ -19,6 +18,7 @@ const useTypingGame = () => {
   const [rightmost, setRightmost] = useState<number>(0);
 
   const handleKeyDown = useCallback((event:KeyboardEvent) => {
+    if (typingState === 'end') return;
     const {key, code} = event;
     if (gameRef.current && document.activeElement !== gameRef.current) gameRef.current.focus();
     if (code === "Slash") {

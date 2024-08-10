@@ -1,7 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 export const useCountdown = (time: number, interval = 1000) => {
-  
-  // const intervalRef = useRef<NodeJS.Timer | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [countdown, setCountdown] = useState<number>(time);
 

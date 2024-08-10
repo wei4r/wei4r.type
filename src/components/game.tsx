@@ -1,6 +1,5 @@
 import { useEffect} from 'react';
 import "../css/globals.css";
-import styles from "../css/page.module.css";
 import Header from './Header';
 import TimeBar from './TimeBar';
 import WordContainer from './WordContainer';

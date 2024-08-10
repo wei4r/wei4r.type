@@ -11,6 +11,9 @@ export const useLogic = () => {
 		startCountdown();
 		setTypingState('typing');
 	}
+  if(countdown === 0 && typingState === 'typing'){
+    setTypingState('end');
+  }
 
   const restart = () => {
     resetCountdown();
