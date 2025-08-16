@@ -14,7 +14,7 @@ export default function Game() {
 
 	useEffect(() => {
     initializeGame(setWordObjs, gameRef);
-  }, []);
+  }, [setWordObjs, gameRef]);
 
 	return (
 	  <div>

@@ -17,7 +17,7 @@ const useTypingGame = () => {
   const [wordnum, setWordNum] = useState<number>(0);
   const [rightmost, setRightmost] = useState<number>(0);
 
-  const handleKeyDown = useCallback((event:KeyboardEvent) => {
+  const handleKeyDown = useCallback((event: KeyboardEvent): void => {
     if (typingState === 'end') return;
     const {key, code} = event;
     if (gameRef.current && document.activeElement !== gameRef.current) gameRef.current.focus();
@@ -108,18 +108,18 @@ const useTypingGame = () => {
       }
 
     }
-  }, [cursorPosition, wordObjs, currentWordIndex]);
+  }, [cursorPosition, wordObjs, currentWordIndex, typingState, rightmost, wordnum]);
 
   useEffect(() => { // Handle user input 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  });
+  }, [handleKeyDown]);
 
   useEffect(() => { // Update cursor
     updateCursor(cursorRef);
   }, [userInput, wordObjs]);
 
-  const reset = () => { // Reset the game
+  const reset = (): void => { // Reset the game
     setWordObjs([]);
     setCurrentWordIndex(0);
     setUserInput('');
