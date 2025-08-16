@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { getRandomWords, WordObj, validKeysSet } from '../utils';
-import { updateCursor } from "../logic";
+import { updateCursor, resetCursorState } from "../logic";
 import { updateWordCorrect, moveCurrent, getYPosition, getXPosition } from "../logic";
+import { useDebounce, useRAFThrottle } from './useDebounce';
 
 type TypingState = 'idle' | 'start' | 'typing' | 'end';
 
@@ -94,14 +95,22 @@ const useTypingGame = () => {
       const yPosition = getYPosition(cursorRef);
       const xPosition = getXPosition(cursorRef);
     
-      if (wordnum>0 && rightmost && xPosition>rightmost-70) {
+      if (wordnum > 0 && rightmost && xPosition > rightmost - 70) {
         const linesToRemove = wordnum;
-        setWordNum(currentWordIndex - linesToRemove+1);
-        const newWords = getRandomWords(linesToRemove);
-        setWordObjs(prev => [...prev.slice(linesToRemove), ...newWords]);
-        setCurrentWordIndex(prev => prev - linesToRemove);
-        setCursorPosition(0);
-        updateCursor(cursorRef);
+        setWordNum(currentWordIndex - linesToRemove + 1);
+        
+        // Progressive loading: Load new words in background
+        setTimeout(() => {
+          const newWords = getRandomWords(linesToRemove);
+          setWordObjs((prev: WordObj[]) => [...prev.slice(linesToRemove), ...newWords]);
+          setCurrentWordIndex((prev: number) => prev - linesToRemove);
+          setCursorPosition(0);
+          
+          // Reset cursor state when words change significantly
+          resetCursorState();
+          updateCursor(cursorRef);
+        }, 16); // Next frame
+        
       } else if (yPosition > 297 && wordnum === 0) {
         const firstLineWordCount = currentWordIndex;
         setWordNum(firstLineWordCount);
@@ -115,7 +124,7 @@ const useTypingGame = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
-  useEffect(() => { // Update cursor
+  useEffect(() => { // Update cursor - direct call for immediate response
     updateCursor(cursorRef);
   }, [userInput, wordObjs]);
 
@@ -126,8 +135,11 @@ const useTypingGame = () => {
     setCursorPosition(0);
     setTypingState('idle');
     setScoreboard([0,0]);
-    updateCursor(cursorRef);
     setWordNum(0);
+    
+    // Reset cursor state when resetting game
+    resetCursorState();
+    updateCursor(cursorRef);
   };
   return {
     wordObjs,

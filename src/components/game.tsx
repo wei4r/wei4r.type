@@ -1,4 +1,4 @@
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import "../css/globals.css";
 import Header from './Header';
 import TimeBar from './TimeBar';
@@ -7,17 +7,17 @@ import Result from './Result';
 import Restart from './Restart';
 import { initializeGame } from '../logic';
 
-
 import { useLogic } from '../hooks/useLogic';
+
 export default function Game() {
-	const{countdown, time, setTime, restart, wordObjs, setWordObjs, cursorRef, gameRef, scoreboard} = useLogic();
+	const {countdown, time, setTime, restart, wordObjs, setWordObjs, cursorRef, gameRef, scoreboard} = useLogic();
 
 	useEffect(() => {
     initializeGame(setWordObjs, gameRef);
   }, [setWordObjs, gameRef]);
 
 	return (
-	  <div>
+		<div>
 			<Header/>
 			<TimeBar time={countdown} setTime={setTime} restart={restart}/>
 			{countdown > 0 ? 
@@ -25,6 +25,6 @@ export default function Game() {
 				: <Result scoreboard={scoreboard} time={time}/>
 			}
 			<Restart restart={restart}/>
-    </div>
-  );
+		</div>
+	);
 }

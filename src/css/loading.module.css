@@ -1,0 +1,62 @@
+.spinner {
+  display: inline-block;
+  position: relative;
+}
+
+.spinnerInner {
+  display: inline-block;
+  border-radius: 50%;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007acc;
+  animation: spin 1s linear infinite;
+}
+
+.small .spinnerInner {
+  width: 16px;
+  height: 16px;
+}
+
+.medium .spinnerInner {
+  width: 24px;
+  height: 24px;
+}
+
+.large .spinnerInner {
+  width: 32px;
+  height: 32px;
+}
+
+@keyframes spin {
+  0% { 
+    transform: rotate(0deg);
+  }
+  100% { 
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading state overlay */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.loadingText {
+  font-size: 14px;
+  color: #666;
+}

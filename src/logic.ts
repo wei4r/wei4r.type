@@ -16,7 +16,8 @@ const cursorState: CursorState = {
 };
 
 export function updateCursor(cursorRef: React.MutableRefObject<HTMLDivElement | null>): boolean {
-    const currentLetter = document.querySelector(`.current`);
+    const currentLetter = document.querySelector('.current');
+    
     if (currentLetter && cursorRef.current) {
         const { left, top } = currentLetter.getBoundingClientRect();
         cursorRef.current.style.left = `${left}px`;
@@ -33,6 +34,14 @@ export function updateCursor(cursorRef: React.MutableRefObject<HTMLDivElement | 
     }
     
     return false;
+};
+
+/**
+ * Reset cursor state - call when word objects change significantly
+ */
+export const resetCursorState = (): void => {
+    cursorState.lastTop = 0;
+    cursorState.initialized = false;
 };
 
 export const updateWordCorrect = (currentWordObj: WordObj): WordObj => {
@@ -87,7 +96,7 @@ export const moveCurrent = (currentWordObj: WordObj, cursorPosition: number, dir
     return currentWordObj;
 }
 
-export const initializeGame = (setWordObjs: (words: WordObj[]) => void, gameRef: React.RefObject<HTMLDivElement>): void => {
+export const initializeGame = (setWordObjs: React.Dispatch<React.SetStateAction<WordObj[]>>, gameRef: React.RefObject<HTMLDivElement>): void => {
     const randomWords = getRandomWords(25);
     randomWords[0].letterArr[0].current = true;
     setWordObjs(randomWords);
